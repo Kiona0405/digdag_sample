@@ -2,4 +2,7 @@ ARG POSTGRES_IMAGE
 
 FROM $POSTGRES_IMAGE
 
-COPY ./config/postgres.conf /etc/postgresql/postgresql.conf 
+USER postgres
+COPY --chown=postgres ./config/postgresql.conf /etc/postgresql/postgresql.conf 
+
+ENTRYPOINT ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
