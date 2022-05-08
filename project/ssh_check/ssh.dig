@@ -1,0 +1,17 @@
+_export:
+  ssh:
+    # host: host.add.re.ss
+    # user: username
+    stdout_log: true # Output stdout log (default true)
+    stderr_log: true # Output stderr log (default false)
+  plugin:
+    repositories:
+      - https://jitpack.io
+    dependencies:
+      - com.github.hiroyuki-sato:digdag-plugin-ssh:0.1.4 # Modify latest version.
+
++step1:
+  ssh>: hostname -i
+  host: digdag
+  user: naoki
+  # public_key: /home/naoki/.ssh/id_rsa

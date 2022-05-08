@@ -1,0 +1,39 @@
+services:
+  proxy:
+    build: ./../proxy/
+    container_name: proxy
+    # networks:
+    #     - front-tier
+    #     - back-tier
+
+  digdag_container:
+    image: digdag_sample_image
+    build: ./../server/
+    container_name: digdag_container
+    tty: true
+    # networks:
+    #   - back-tier
+    volumes:
+      - type: volume 
+        source: workflow_volume
+        target: /opt/digdag/workflow
+
+volumes:
+  workflow_volume:
+    external:
+      name: ${WORKFLOW_VOLUME}
+
+# configs:
+#   httpd-config:
+#     external: true
+
+# secrets:
+#   server-certificate:
+#     external: true
+
+# networks:
+#   # The presence of these objects is sufficient to define them
+#   front-tier: {}
+#   back-tier: 
+#     driver: bridge
+#     internal: true

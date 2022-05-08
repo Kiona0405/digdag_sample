@@ -1,0 +1,64 @@
+services:
+  postgre:
+    image: $POSTGRES_TAG
+    build: ./postgres
+    container_name: $POSTGRES_CONTAINER
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      # - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_PORT=$POSTGRES_PORT
+      - POSTGRES_DB=$POSTGRES_DB
+      - PGDATA=$POSTGRES_DATA
+      - POSTGRES_HOST_AUTH_METHOD=$POSTGRES_HOST_AUTH_METHOD
+    volumes:
+      - type: volume
+        source: database_volume
+        target: $POSTGRES_DATA
+    networks:
+      - digdag_net
+    tty: true
+
+  # digdag:
+  #   image: $DIGDAG_TAG
+  #   build: ./digdag
+  #   container_name: $DIGDAG_CONTAINER
+  #   tty: true
+  #   ports:
+  #     - "${DIGDAG_PORT}:${DIGDAG_PORT}"
+  #   environment:
+  #     - DIGDAG_PORT=$DIGDAG_PORT
+  #     - DIGDAG_ADMIN_PORT=$DIGDAG_ADMIN_PORT
+  #     - POSTGRES_CONTAINER=$POSTGRES_CONTAINER
+  #     - POSTGRES_USER=$POSTGRES_USER
+  #     - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+  #     - POSTGRES_PORT=$POSTGRES_PORT
+  #     - POSTGRES_DB=$POSTGRES_DB
+  #   volumes:
+  #     - type: volume 
+  #       source: workflow_volume
+  #       target: /opt/digdag/workflow
+  #   networks:
+  #     - digdag_net
+
+volumes:
+  workflow_volume:
+    external:
+      name: ${WORKFLOW_VOLUME}
+  database_volume:
+    external:
+      name: ${DATABASE_VOLUME}
+
+# configs:
+#   httpd-config:
+#     external: true
+
+# secrets:
+#   server-certificate:
+#     external: true
+
+networks:
+  # The presence of these objects is sufficient to define them
+  digdag_net: {}
+  # back-tier: 
+  #   driver: bridge
+  #   internal: true
